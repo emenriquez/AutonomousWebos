@@ -1,0 +1,114 @@
+#VRML_SIM R2023a utf8
+
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023a/projects/objects/backgrounds/protos/TexturedBackground.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023a/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023a/projects/objects/floors/protos/RectangleArena.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023a/projects/robots/gctronic/e-puck/protos/E-puck.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023a/projects/objects/solids/protos/SolidBox.proto"
+IMPORTABLE EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023a/projects/objects/create_wall/protos/CreateWall.proto"
+
+WorldInfo {
+}
+Viewpoint {
+  orientation -0.5773502691896258 0.5773502691896258 0.5773502691896258 2.0944
+  position 1.2335190497846211e-05 1.233522538019921e-05 6.496412963920686
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+}
+DEF ARENA RectangleArena {
+  floorSize 2 2
+}
+DEF TARGET0 SolidBox {
+  translation -0.09000000077856549 0.35999999922143444 0.009996863131752659
+  rotation 0.7071067792927299 -0.7071067830803651 -1.382105129048055e-09 1.101240644525321e-07
+  name "target"
+  size 0.02 0.02 0.02
+  physics Physics {
+  }
+}
+DEF TARGET1 SolidBox {
+  translation -0.09000000077856549 0.35999999922143444 0.009996863131752659
+  rotation 0.7071067792927299 -0.7071067830803651 -1.382105129048055e-09 1.101240644525321e-07
+  name "target(1)"
+  size 0.02 0.02 0.02
+  physics Physics {
+  }
+}
+DEF TARGET2 SolidBox {
+  translation -0.09000000077856549 0.35999999922143444 0.009996863131752659
+  rotation 0.7071067792927299 -0.7071067830803651 -1.382105129048055e-09 1.101240644525321e-07
+  name "target(2)"
+  size 0.02 0.02 0.02
+  physics Physics {
+  }
+}
+DEF TARGET3 SolidBox {
+  translation -0.09000000077856549 0.35999999922143444 0.009996863131752659
+  rotation 0.7071067792927299 -0.7071067830803651 -1.382105129048055e-09 1.101240644525321e-07
+  name "target(3)"
+  size 0.02 0.02 0.02
+  physics Physics {
+  }
+}
+DEF TARGET4 SolidBox {
+  translation -0.09000000077856549 0.35999999922143444 0.009996863131752659
+  rotation 0.7071067792927299 -0.7071067830803651 -1.382105129048055e-09 1.101240644525321e-07
+  name "target(4)"
+  size 0.02 0.02 0.02
+  physics Physics {
+  }
+}
+DEF TARGET5 SolidBox {
+  translation -0.09000000077856549 0.35999999922143444 0.009996863131752659
+  rotation 0.7071067792927299 -0.7071067830803651 -1.382105129048055e-09 1.101240644525321e-07
+  name "target(5)"
+  size 0.02 0.02 0.02
+  physics Physics {
+  }
+}
+DEF TARGET6 SolidBox {
+  translation -0.09000000077856549 0.35999999922143444 0.009996863131752659
+  rotation 0.7071067792927299 -0.7071067830803651 -1.382105129048055e-09 1.101240644525321e-07
+  name "target(6)"
+  size 0.02 0.02 0.02
+  physics Physics {
+  }
+}
+DEF TARGET7 SolidBox {
+  translation -0.09000000077856549 0.35999999922143444 0.009996863131752659
+  rotation 0.7071067792927299 -0.7071067830803651 -1.382105129048055e-09 1.101240644525321e-07
+  name "target(7)"
+  size 0.02 0.02 0.02
+  physics Physics {
+  }
+}
+DEF TARGET8 SolidBox {
+  translation -0.09000000077856549 0.35999999922143444 0.009996863131752659
+  rotation 0.7071067792927299 -0.7071067830803651 -1.382105129048055e-09 1.101240644525321e-07
+  name "target(8)"
+  size 0.02 0.02 0.02
+  physics Physics {
+  }
+}
+DEF TARGET9 SolidBox {
+  translation -0.09000000077856549 0.35999999922143444 0.009996863131752659
+  rotation 0.7071067792927299 -0.7071067830803651 -1.382105129048055e-09 1.101240644525321e-07
+  name "target(9)"
+  size 0.02 0.02 0.02
+  physics Physics {
+  }
+}
+E-puck {
+  hidden position_0_0 -3.4537769781755645
+  hidden position_0_1 4.029652497336932
+  hidden linearVelocity_0 1.315729377923087e-07 1.2595535489378673e-05 -5.962859799525414e-07
+  hidden angularVelocity_0 -5.3810988378026975e-06 4.0509240606524e-06 2.114534184647481
+  hidden rotation_1 0 -0.9999999999999999 0 3.4537769781755645
+  hidden rotation_2 0 0.9999999999999999 0 4.029652497336932
+  translation -0.002904512623081672 -0.00037300612127312435 -0.00011986805886798381
+  rotation -1.6350988777320189e-06 4.993941656680924e-07 0.9999999999985385 -0.531851088424732
+  controller "epuck_targetFinder"
+  supervisor TRUE
+}
