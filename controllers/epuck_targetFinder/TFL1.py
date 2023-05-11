@@ -99,12 +99,12 @@ class TargetFinderRobo(RobotSupervisorEnv):
         for i in range(len(self.targets)):
             target = self.targets[i]
             if target.getContactPoints():
-                target.getField('translation').setSFVec3f([-0.6, self.targets_found*0.02, 0.02])
+                target.getField('translation').setSFVec3f([-0.6, self.targets_found*0.025, 0.02])
                 self.numSteps = 0
                 self.targets_found += 1
-                self.episode_score += self.targets_found*2
+                self.episode_score += self.targets_found
                 self.intialTargetPositions[2*i:2*i+2] = [0, 0]
-                return self.targets_found*2
+                return self.targets_found
 
         if len(self.boss.getContactPoints()) > 2:
             self.obstacleCollisions += 1
