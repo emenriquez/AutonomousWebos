@@ -96,6 +96,7 @@ class TargetFinderRobo(RobotSupervisorEnv):
                 self.targetSpawn()
                 self.numSteps = 0
                 self.targets_found += 1
+                self.episode_score += self.targets_found*2
                 return self.targets_found*2
 
         if len(self.boss.getContactPoints()) > 2:

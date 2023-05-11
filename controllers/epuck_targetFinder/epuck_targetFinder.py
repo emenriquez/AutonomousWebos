@@ -1,5 +1,6 @@
 from agents.PPO_agent import PPOAgent, Transition
-from TargetFinderRobo import TargetFinderRobo
+# from TargetFinderRobo import TargetFinderRobo
+from TFL1 import TargetFinderRobo
 
 
 
@@ -33,7 +34,6 @@ while not solved and episode_count < episode_limit:
 
         # take the action
         new_obs, reward, done, info = env.step(selected_action)
-        assert len(new_obs) == len(env.get_default_observation()), f"went all wrong at step: {env.numSteps}"
         
         # Save the transtion in memory for training
         trans = Transition(observation, selected_action, action_prob, reward, new_obs)
@@ -60,6 +60,7 @@ if not solved:
     print("Task is not solved, deploying for testing...")
 else:
     print("Agent is ready for deployment. Deploying now...")
+    agent.save('models/TFL1', best=True)
 
 observation = env.reset()
 env.episode_score = 0.0
