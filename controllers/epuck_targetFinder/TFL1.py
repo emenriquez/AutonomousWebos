@@ -30,7 +30,7 @@ class TargetFinderRobo(RobotSupervisorEnv):
         max_obs[3:7] = [1, 1, 1, 1]
         self.observation_space = Box(low=min_obs, high=max_obs, dtype=np.float64)
         # Actions
-        self.action_space = Discrete(4)
+        self.action_space = Discrete(3)
 
         # define the robot
         self.boss = self.getSelf()
@@ -40,7 +40,7 @@ class TargetFinderRobo(RobotSupervisorEnv):
         self.rMotor = self.getDevice('right wheel motor')        
 
         # Episode setup and parameters
-        self.steps_per_episode = 5000
+        self.steps_per_episode = 2000
         self.episode_score = 0
         self.numSteps = 0
         self.episode_score_list = []
@@ -51,9 +51,14 @@ class TargetFinderRobo(RobotSupervisorEnv):
 
         # Environment parameters
         self.arena = self.getFromDef('ARENA').getField('floorSize')
-        self.homeBaseRadius = 0.1 # self.getFromDef('BASE').getField('radius').getSFFloat()
-        self.target = self.getFromDef('TARGET')
-        self.targetField = self.target.getField('translation')
+        self.homeBaseRadius = 0.1 # Central region where targets won't spawn
+
+        # Spawn Targets
+        self.targets = [] 
+        for i in range(10):
+            self.targets.append(self.getFromDef(f'TARGET{i}'))
+        self.intialTargetPositions = [0.0 for _ in range(20)]
+
 
         # Robot controls
         self.rotation_field = self.boss.getField('rotation')
@@ -66,8 +71,7 @@ class TargetFinderRobo(RobotSupervisorEnv):
         obs.append(self.boss.getOrientation()[1]) # orientation
         for ps in self.posSensors:
             obs.append(ps.getValue()/2500)
-        obs.extend(self.targetField.getSFVec3f()[0:2]) # target position
-        obs.extend([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]) # other targets
+        obs.extend(self.intialTargetPositions)
 
         return obs
     
@@ -76,13 +80,13 @@ class TargetFinderRobo(RobotSupervisorEnv):
         maxX /= 2
         maxY /= 2
         if outerBuffer:
-            maxX *= .95
-            maxY *= .95
+            maxX *= .9
+            maxY *= .9
             
         x = np.random.uniform(-maxX, maxX)
         thresh = np.sqrt( abs(self.homeBaseRadius**2-x**2) ) if abs(x) < self.homeBaseRadius else 0
         y = np.random.uniform(thresh, maxY) * np.random.choice([-1, 1])
-        self.targetField.setSFVec3f([x, y, 0.03])
+        t.getField('translation').setSFVec3f([x, y, 0.02])
 
         return x, y
     
@@ -92,12 +96,14 @@ class TargetFinderRobo(RobotSupervisorEnv):
     def get_reward(self, action=None):
         collisionPenalty = 0
 
-        for target in [self.target]:
+        for i in range(len(self.targets)):
+            target = self.targets[i]
             if target.getContactPoints():
-                # You can set the target to some outside area here target.getField('translation').setSFVec3f([-1, someUniqueY, 0.03])
-                self.targetSpawn()
+                target.getField('translation').setSFVec3f([-0.6, self.targets_found*0.025, 0.02])
                 self.numSteps = 0
                 self.targets_found += 1
+                self.episode_score += self.targets_found
+                self.intialTargetPositions[2*i:2*i+2] = [0, 0]
                 return self.targets_found
 
         if len(self.boss.getContactPoints()) > 2:
@@ -105,7 +111,7 @@ class TargetFinderRobo(RobotSupervisorEnv):
             if self.obstacleCollisions > 0:
                 collisionPenalty = 1
         
-        stepReward = -0.003 - 0.01*(collisionPenalty)
+        stepReward = -0.002 - 0.01*(collisionPenalty)
         self.episode_score += stepReward
         return stepReward
     
@@ -155,11 +161,11 @@ class TargetFinderRobo(RobotSupervisorEnv):
         self.numSteps += 1
         self.moving = True
 
-        if(action == 1):
+        if(action == 0):
             self.moveForward()
-        elif(action == 2):
+        elif(action == 1):
             self.turn(dir=1) # turn right
-        elif(action == 3):
+        elif(action == 2):
             self.turn(dir=-1) # turn left
         else:
             self.noMotion()
@@ -188,7 +194,9 @@ class TargetFinderRobo(RobotSupervisorEnv):
 
     def reset(self):
         resetObs = super().reset()
-        self.targetSpawn()
+        for i in range(len(self.targets)):
+            self.targetSpawn(self.targets[i])
+            self.intialTargetPositions[2*i:2*i+2] = self.targets[i].getField('translation').getSFVec3f()[0:2]
         self.enablePositionSensors()
         self.rotation_field.setSFRotation([0.0, 0.0, 1.0, np.random.uniform(-np.pi, np.pi)])
         self.obstacleCollisions = -15
