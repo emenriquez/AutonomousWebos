@@ -94,14 +94,17 @@ class PPOAgent:
             value = self.critic_net(state)
         return value.item()
 
-    def save(self, path):
+    def save(self, path, best=False):
         """
         Save actor and critic models in the path provided.
 
         :param path: path to save the models
         :type path: str
         """
-        jobID = f"{datetime.date.today()}_{datetime.datetime.now().hour}" 
+        if best:
+            jobID = 'best'
+        else:
+            jobID = f"{datetime.date.today()}_{datetime.datetime.now().hour}" 
         save(self.actor_net.state_dict(), path + jobID + '_actor.pkl')
         save(self.critic_net.state_dict(), path + jobID + '_critic.pkl')
 

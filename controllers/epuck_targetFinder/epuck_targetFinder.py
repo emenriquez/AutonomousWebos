@@ -1,20 +1,18 @@
-from PPO_agent import PPOAgent, Transition
+from agents.PPO_agent import PPOAgent, Transition
 from TargetFinderRobo import TargetFinderRobo
-from FindAndRetrieveRobo import FindAndRetrieveRobo
 
 
 
 
 # Outside of class, RL Training Loop Implementation
 
-# env = TargetFinderRobo()
-env = FindAndRetrieveRobo()
+env = TargetFinderRobo()
 
 agent = PPOAgent(number_of_inputs=env.observation_space.shape[0],
                  number_of_actor_outputs=env.action_space.n)
 
 # Load the pre-trained agent
-agent.load('models/2023-04-30_17')
+# agent.load('models/2023-04-30_21') # Good model
 
 solved = False
 episode_count = 0
@@ -22,7 +20,7 @@ episode_limit = 5000
 
 
 
-while not solved or episode_count < episode_limit:
+while not solved and episode_count < episode_limit:
     observation = env.reset()
     env.episode_score = 0
 
@@ -35,6 +33,7 @@ while not solved or episode_count < episode_limit:
 
         # take the action
         new_obs, reward, done, info = env.step(selected_action)
+        assert len(new_obs) == len(env.get_default_observation()), f"went all wrong at step: {env.numSteps}"
         
         # Save the transtion in memory for training
         trans = Transition(observation, selected_action, action_prob, reward, new_obs)
@@ -47,11 +46,10 @@ while not solved or episode_count < episode_limit:
             agent.store_transition(trans)
             break
 
-        env.episode_score += reward
         observation = new_obs
 
     print(f"Episode: {episode_count}\tscore: {env.episode_score}")
-    agent.writer.add_scalar('episode_reward', env.episode_score, episode_count)
+    # agent.writer.add_scalar('episode_reward', env.episode_score, episode_count)
     episode_count += 1
 
 

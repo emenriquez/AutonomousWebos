@@ -11,22 +11,46 @@ WorldInfo {
 }
 Viewpoint {
   orientation -0.5773502691896258 0.5773502691896258 0.5773502691896258 2.0944
-  position 4.030222755060638e-06 4.030234152896367e-06 3.559336346970222
+  position -0.0003697939574061848 0.0009032010490379644 3.1864100765458323
 }
 TexturedBackground {
 }
 TexturedBackgroundLight {
 }
-RectangleArena {
+DEF ARENA RectangleArena {
 }
 DEF TARGET SolidBox {
-  translation -0.09 0.36 0.01
+  translation -0.09 0.36 0.02
+  rotation 0.7071067813683799 -0.7071067810047149 -6.072193669963122e-10 2.150396278960139e-07
   name "target"
   size 0.02 0.02 0.02
-  physics Physics {
-  }
 }
 E-puck {
+  hidden position_0_0 -3.096690983061884e-08
+  hidden position_0_1 -3.0966853922601506e-08
+  hidden linearVelocity_0 -4.290336339231755e-09 2.663970078499917e-08 -7.24444474684603e-07
+  hidden angularVelocity_0 -1.7760081269119786e-06 1.260481868913175e-07 -5.491680514546731e-14
+  hidden rotation_1 0 -1 0 2.9802322387695313e-08
+  hidden rotation_2 0 -1 0 2.9802322387695313e-08
+  translation -1.0172447750167052e-10 1.7845914440978517e-11 -6.386930372575747e-05
+  rotation 0.9999535326538103 0.009640152123346811 4.514161087815717e-07 2.3007304761751842e-07
   controller "epuck_targetFinder"
   supervisor TRUE
+}
+DEF BASE Shape {
+  appearance Appearance {
+    material Material {
+      diffuseColor 0.8 0.6 1
+      shininess 0
+      transparency 0.8
+    }
+  }
+  geometry Cylinder {
+    bottom FALSE
+    height 0.1
+    radius 0.1
+    side FALSE
+  }
+  castShadows FALSE
+  isPickable FALSE
 }

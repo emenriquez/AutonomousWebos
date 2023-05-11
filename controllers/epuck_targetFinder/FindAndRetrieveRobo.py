@@ -46,7 +46,7 @@ class FindAndRetrieveRobo(RobotSupervisorEnv):
             # Randomize positions
             self.new_targets()
                                 
-        self.targetField = self.targets[self.targets_found].getField('translation')
+        self.targetField = self.targets[-1].getField('translation')
 
     def get_heading(self):
         return 0
@@ -54,7 +54,7 @@ class FindAndRetrieveRobo(RobotSupervisorEnv):
     def get_observations(self):
         xPos = self.boss.getPosition()[0]
         yPos = self.boss.getPosition()[1]
-        self.targetField = self.targets[self.targets_found].getField('translation')
+        self.targetField = self.targets[-1].getField('translation')
         xTarget = self.targetField.getSFVec3f()[0]
         yTarget = self.targetField.getSFVec3f()[1]
         rot = self.boss.getOrientation()[1]
@@ -67,17 +67,16 @@ class FindAndRetrieveRobo(RobotSupervisorEnv):
         return [0.0 for _ in range(self.observation_space.shape[0])]
     
     def get_reward(self, action=None):
-        if self.distanceToTarget < 0.1:
-            self.next_target()
-            return 5
+        for target in self.targets:
+            if target.getContactPoints():
+                # target.remove()
+                # self.targets.remove(target) # Removing nodes is.... tricky!
+                arenaValidAreaCenter = 0.8*self.arenaSize/2
+                target.getField('translation').setSFVec3f([np.random.uniform(-arenaValidAreaCenter, arenaValidAreaCenter), np.random.uniform(-arenaValidAreaCenter, arenaValidAreaCenter), 0.03])
+                self.numSteps = 0
+                self.targets_found += 1
+                return 5
         return -0.001 + 0.001*self.heading
-    
-    def next_target(self):
-        # Destroy target
-        self.targets
-        self.numSteps = 0
-        self.targets_found += 1
-        #
 
     def new_targets(self):
         arenaValidAreaCenter = 0.8*self.arenaSize/2
@@ -141,4 +140,5 @@ class FindAndRetrieveRobo(RobotSupervisorEnv):
         resetObs = super().reset()
         # self.boss.setOrientation([0, 0, np.pi])
         self.rotation_field.setSFRotation([0.0, 0.0, 1.0, np.random.uniform(-np.pi, np.pi)])
+        self.new_targets()
         return resetObs
