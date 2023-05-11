@@ -49,7 +49,7 @@ while not solved and episode_count < episode_limit:
         observation = new_obs
 
     print(f"Episode: {episode_count}\tscore: {env.episode_score}")
-    # agent.writer.add_scalar('episode_reward', env.episode_score, episode_count)
+    agent.writer.add_scalar('episode_reward', env.episode_score, episode_count)
     episode_count += 1
 
 

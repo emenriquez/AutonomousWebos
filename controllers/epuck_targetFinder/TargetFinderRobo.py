@@ -40,12 +40,10 @@ class TargetFinderRobo(RobotSupervisorEnv):
         self.rMotor = self.getDevice('right wheel motor')        
 
         # Episode setup and parameters
-        self.steps_per_episode = 5000
+        self.steps_per_episode = 2000
         self.episode_score = 0
         self.numSteps = 0
         self.episode_score_list = []
-        self.distanceToTarget = 1
-        self.heading = 0
         self.targets_found = 0
         self.obstacleCollisions = -15
 
@@ -98,14 +96,14 @@ class TargetFinderRobo(RobotSupervisorEnv):
                 self.targetSpawn()
                 self.numSteps = 0
                 self.targets_found += 1
-                return self.targets_found
+                return self.targets_found*2
 
         if len(self.boss.getContactPoints()) > 2:
             self.obstacleCollisions += 1
             if self.obstacleCollisions > 0:
                 collisionPenalty = 1
         
-        stepReward = -0.003 - 0.01*(collisionPenalty)
+        stepReward = -0.002 - 0.01*(collisionPenalty)
         self.episode_score += stepReward
         return stepReward
     
